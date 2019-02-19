@@ -1,16 +1,16 @@
 import argparse
 from antlr4 import *
-from testLexer import testLexer
-from testListener import testListener
-from testParser import testParser
+from task_2_1Lexer import task_2_1Lexer
+from task_2_1Listener import task_2_1Listener
+from task_2_1Parser import task_2_1Parser
 from antlr4.tree.Trees import Trees
 
 def get_token_type(token):
-    if token.type == testLexer.INT:
+    if token.type == task_2_1Lexer.INT:
         return "INT"
-    elif token.type == testLexer.NEWLINE:
+    elif token.type == task_2_1Lexer.NEWLINE:
         return "NEWLINE"
-    elif token.type == testLexer.OPERATOR:
+    elif token.type == task_2_1Lexer.OPERATOR:
         return "OPERATOR"
     else:
         return "ERROR UNKNOWN TOKEN"
@@ -20,9 +20,9 @@ def main():
     with open(args.file, "r") as file:
         lines = file.read()
     input_stream = InputStream(lines)
-    lexer = testLexer(input_stream)
+    lexer = task_2_1Lexer(input_stream)
     token_stream = CommonTokenStream(lexer)
-    parser = testParser(token_stream)
+    parser = task_2_1Parser(token_stream)
 
  #   tree = parser.start()
  #   print(Trees.toStringTree(tree,None, parser))
