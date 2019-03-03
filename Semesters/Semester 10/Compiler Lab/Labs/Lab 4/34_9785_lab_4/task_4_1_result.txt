@@ -1,0 +1,5 @@
+S : A a | B b | c
+A : B b c A' | c c A' | B f A' | b d A'
+A' : a c A' | epsilon
+B : f B'
+B' : e B' | epsilon
