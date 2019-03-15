@@ -1,38 +1,66 @@
+composite_sentence(A, Z):-
+  sentence(A, Z);
+  (sentence(A, B), (while(B, C); and(B, C)), sentence(C, Z)).
+
 sentence(A, Z):-
-  noun_phrase(A, B),
-  verb_phrase(B, Z).
+  noun_phrase(A, B), verb_phrases(B, Z).
 
-% sentence()
-
-verb_phrase(A,Z):-
-  verb(A, B),
-  noun_phrase(B, Z).
+verb_phrases(A, Z):-
+  verb_phrase(A, Z);
+  (verb_phrase(A, B), and(B, C), verb_phrases(C, Z)).
 
 verb_phrase(A,Z):-
-  adverb(A, B),
-  verb(B, C),
-  noun_phrase(C, Z).
+  (adverbed_verb(A, B), prepositional_noun_phrases(B, Z));
+  (adverbed_verb(A, B), and(B, C), verb_phrase(C, Z)).
+
+adverbed_verb(A, Z):-
+  verb(A, Z);
+  (adverb(A, B), verb(B, Z));
+  (verb(A, B), adverb(B, Z)).
+
+non_who_non_anded_noun_phrase(A, Z):-
+  (determiner(A, B), adjectives(B, C), noun(C, Z));
+  (determiner(A, B), noun(B, Z));
+  (adjectives(A, B), plural_noun(B, Z));
+  plural_noun(A, Z).
+
+non_who_noun_phrase(A, Z):-
+  non_who_non_anded_noun_phrase(A, Z);
+  (non_who_non_anded_noun_phrase(A, B), and(B, C), non_who_non_anded_noun_phrase(C, Z)).
 
 noun_phrase(A, Z):-
-  singular_determiner(A, B),
-  adjectives(B, C),
-  singular_noun(C, Z).
-noun_phrase(A, Z):-
-  singular_determiner(A, B),
-  singular_noun(B, Z).
-noun_phrase(A, Z):-
-  plural_determiner(A, B),
-  adjectives(B, C),
-  plural_noun(C, Z).
-noun_phrase(A, Z):-
-  plural_determiner(A, B),
-  plural_noun(B, Z).
+  non_who_noun_phrase(A, Z);
+  (non_who_noun_phrase(A, B), who_phrase(B, Z)).
+
+
+prepositional_noun_phrase(A, Z):-
+  noun_phrase(A, Z);
+  (preposition(A, B), noun_phrase(B, Z));
+  (preposition(A, B), noun(B, Z)).
+
+prepositional_noun_phrases(A, Z):-
+  prepositional_noun_phrase(A, Z);
+  (prepositional_noun_phrase(A, B), prepositional_noun_phrases(B, Z)).
+
+% noun_phrase(A, Z):-
+%   singular_determiner(A, B),
+%   singular_noun(B, Z).
+% noun_phrase(A, Z):-
+%   plural_determiner(A, B),
+%   adjectives(B, C),
+%   plural_noun(C, Z).
+% noun_phrase(A, Z):-
+%   plural_determiner(A, B),
+%   plural_noun(B, Z).
 
 adjectives(A, Z):-
   adjective(A, Z).
 adjectives(A, Z):-
   adjective(A, B),
   adjectives(B, Z).
+
+who_phrase(A, Z):-
+  who(A, B), verb_phrase(B, Z).
 
 % determined_noun(A, Z):-
 %   singular_determiner(A, B),
@@ -45,18 +73,21 @@ determiner([any|X], X).
 determiner([his|X], X).
 determiner([her|X], X).
 determiner([their|X], X).
+determiner(A, Z):-
+  singular_determiner(A, Z);
+  plural_determiner(A, Z).
 
 singular_determiner([a|X], X).
 singular_determiner([every|X], X).
 singular_determiner([each|X], X).
-singular_determiner(A, Z):-
-  singular_determiner(A, Z);
-  determiner(A, Z).
+% singular_determiner(A, Z):-
+%   singular_determiner(A, Z);
+%   determiner(A, Z).
 
 plural_determiner([many|X], X).
-plural_determiner(A, Z):-
-  plural_determiner(A, Z);
-  determiner(A, Z).
+% plural_determiner(A, Z):-
+%   plural_determiner(A, Z);
+%   determiner(A, Z).
 
 %-------------------------------------------------------------------------------
 
@@ -83,7 +114,11 @@ adjective([small|X], X).
 
 %-------------------------------------------------------------------------------
 
+noun(A, Z):-
+  singular_noun(A, Z);
+  plural_noun(A, Z).
 singular_noun([boy|X], X).
+singular_noun([box|X], X).
 singular_noun([man|X], X).
 singular_noun([room|X], X).
 singular_noun([school|X], X).
@@ -106,9 +141,9 @@ plural_noun([researchers|X], X).
 
 %-------------------------------------------------------------------------------
 
-relativiser([who|X], X).
-conjunction([and|X], X).
-conjunction([while|X], X).
+who([who|X], X).
+and([and|X], X).
+while([while|X], X).
 
 %-------------------------------------------------------------------------------
 
