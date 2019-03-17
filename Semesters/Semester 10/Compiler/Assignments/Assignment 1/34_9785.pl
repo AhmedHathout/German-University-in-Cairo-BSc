@@ -39,7 +39,7 @@ prepositional_noun_phrase(PNPTree, A, Z):-
 
 prepositional_noun_phrases(PNPsTree, A, Z):-
   prepositional_noun_phrase(PNPsTree, A, Z);
-  (prepositional_noun_phrase(PNPTree, A, B), prepositional_noun_phrases(InnerPNPsTree, B, Z), PNPsTree = np(PNPTree, InnerPNPsTree)).
+  (prepositional_noun_phrase(PNPTree, A, B), prepositional_noun_phrases(InnerPNPsTree, B, Z), PNPsTree = nps(PNPTree, InnerPNPsTree)).
 
 adjectives(AdjTree, A, Z):-
   adjective(AdjTree, A, Z).
