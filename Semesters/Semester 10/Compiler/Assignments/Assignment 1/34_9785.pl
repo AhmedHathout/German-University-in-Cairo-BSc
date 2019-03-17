@@ -1,6 +1,6 @@
-composite_sentence(Tree, A, Z):-
+s(Tree, A, Z):-
   sentence(Tree, A, Z);
-  (sentence(STree, A, B), (while(ConjunctionTree, B, C); and(ConjunctionTree, B, C)), composite_sentence(Inner, C, Z), Tree = ss(STree, ConjunctionTree, Inner)).
+  (sentence(STree, A, B), (while(ConjunctionTree, B, C); and(ConjunctionTree, B, C)), s(Inner, C, Z), Tree = s(STree, ConjunctionTree, Inner)).
 
 sentence(s(NPsTree, VPsTree), A, Z):-
   noun_phrases(NPsTree, A, B), verb_phrases(VPsTree, B, Z).
@@ -32,14 +32,14 @@ non_who_noun_phrase(NPTree, A, Z):-
   (adjectives(AdJTree, A, B), plural_noun(NTree, B, Z), NPTree = np(AdJTree, NTree));
   (plural_noun(NTree, A, Z), NPTree = np(NTree)).
 
-prepositional_noun_phrase(PNPsTree, A, Z):-
-  noun_phrases(PNPsTree, A, Z);
+prepositional_noun_phrase(PNPTree, A, Z):-
+  noun_phrases(PNPTree, A, Z);
   (preposition(PTree, A, B), noun_phrases(NPsTree, B, Z), PNPTree = pnp(PTree, NPsTree));
   (preposition(PTree, A, B), noun(NTree, B, Z), PNPTree = pnp(PTree, NTree)).
 
 prepositional_noun_phrases(PNPsTree, A, Z):-
   prepositional_noun_phrase(PNPsTree, A, Z);
-  (prepositional_noun_phrase(PNPTree, A, B), prepositional_noun_phrases(InnerPNPsTree, B, Z), PNPsTree = pnp(PNPTree, InnerPNPsTree)).
+  (prepositional_noun_phrase(PNPTree, A, B), prepositional_noun_phrases(InnerPNPsTree, B, Z), PNPsTree = np(PNPTree, InnerPNPsTree)).
 
 adjectives(AdjTree, A, Z):-
   adjective(AdjTree, A, Z).
