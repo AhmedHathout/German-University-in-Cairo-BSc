@@ -77,14 +77,6 @@ class Rule():
             if all_variables_contains_epsilon:
                 rule_first_list.append(frozenset({Production.EPSILON}))
 
-        # Check if the algorithm is correct
-        for production_firsts in rule_first_list:
-            if not production_firsts <= self.first: # checks if subset
-                print(rule_first_list)
-                print(production_firsts)
-                print(self.first)
-                raise AssertionError("The computed 'first' set is different than the input")
-
         return rule_first_list
 
     @staticmethod
@@ -186,30 +178,24 @@ class LLTable:
         stack.append("$")
         stack.append(self.grammar.start_variable)
 
-        current_terminal = ""
-        for input_char in input + "$":
-            current_terminal += input_char
-            if not current_terminal in self.terminals:
-                continue
-            else:
-                while True:
-                    char_on_top = stack.pop()
-                    if self.__is_variable(char_on_top):
-                        productions = self.table[char_on_top][current_terminal]
+        for terminal in input.strip().split(" ") + ["$"]:
+            while True:
+                char_on_top = stack.pop()
+                if self.__is_variable(char_on_top):
+                    productions = self.table[char_on_top][terminal]
 
-                        if not productions:
-                            return False
-
-                        if not productions[0].is_epsilon():
-                            for char in reversed(productions[0].chars):
-                                stack.append(char)
-
-                    elif char_on_top == current_terminal:
-                        current_terminal = ""
-                        break
-
-                    else:
+                    if not productions:
                         return False
+
+                    if not productions[0].is_epsilon():
+                        for char in reversed(productions[0].chars):
+                            stack.append(char)
+
+                elif char_on_top == terminal:
+                    break
+
+                else:
+                    return False
 
         # Probably should just return True since reaching this point means that it is the case
         if not stack:
