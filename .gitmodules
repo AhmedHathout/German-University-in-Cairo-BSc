@@ -1,3 +1,6 @@
 [submodule "Semesters\\Semester 10\\Compiler Lab/Compiler-Project"]
 	path = Semesters\\Semester 10\\Compiler Lab/Compiler-Project
 	url = https://github.com/AhmedHathout/Compiler-Project.git
+[submodule "Semesters\\Semester 10\\Security\\Project\\Rootkit"]
+	path = Semesters\\Semester 10\\Security\\Project\\Rootkit
+	url = https://github.com/AhmedHathout/Rootkit
