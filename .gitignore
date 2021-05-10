@@ -6,3 +6,7 @@ Semesters/Semester 9/Machine Learning/Assignments/Assignment 1/Least Squares/Tes
 Semesters/Semester 9/Machine Learning/Assignments/Assignment 1/Least Squares/Train/
 
 Semesters/Semester 9/Data Engineering/Practical Sessions/
+
+.idea/
+venv/
+__pycache__/
